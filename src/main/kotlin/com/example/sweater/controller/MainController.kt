@@ -1,4 +1,4 @@
-package com.example.sweater
+package com.example.sweater.controller
 
 import com.example.sweater.domain.Message
 import com.example.sweater.domain.MessageRepo
@@ -11,28 +11,24 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 
 @Controller
-class GreetingController {
+class MainController {
 
     @Autowired
-    lateinit var messageRepo: MessageRepo
+    private lateinit var messageRepo: MessageRepo
 
-    @GetMapping("/greeting")
-    fun greeting(
-            @RequestParam(name = "name", required = false, defaultValue = "World") name: String,
-            model: Model
-    ): String {
-        model["name"] = name
+    @GetMapping("/")
+    fun greeting(model: Model): String {
         return "greeting"
     }
 
-    @GetMapping
+    @GetMapping("/main")
     fun main(model: Model): String {
         model["messages"] = messageRepo.findAll()
 
         return "main"
     }
 
-    @PostMapping
+    @PostMapping("/main")
     fun add(@RequestParam text: String, @RequestParam tag: String, model: Model): String {
         val message = Message(0, text, tag)
         messageRepo.save(message)

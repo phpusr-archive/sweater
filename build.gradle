@@ -14,6 +14,7 @@ buildscript {
 	}
 }
 
+apply plugin: 'idea'
 apply plugin: 'kotlin'
 apply plugin: 'kotlin-spring'
 apply plugin: "kotlin-jpa"
@@ -25,6 +26,14 @@ version = '0.0.1-SNAPSHOT'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
+// Hot swap: https://medium.com/@bojanbelic/spring-boot-hot-swapping-a-gradle-project-in-intellij-with-kotlin-support-3559996dfafd
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("${buildDir}/classes/kotlin/main")
+	}
+}
 
 compileKotlin {
 	kotlinOptions {
@@ -61,4 +70,6 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// Use MySQL Connector-J
 	compile 'mysql:mysql-connector-java'
+	// Security
+	compile("org.springframework.boot:spring-boot-starter-security")
 }
