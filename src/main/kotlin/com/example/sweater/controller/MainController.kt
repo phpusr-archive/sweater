@@ -19,35 +19,32 @@ class MainController {
     private lateinit var messageRepo: MessageRepo
 
     @GetMapping("/")
-    fun greeting(model: Model): String {
+    fun greeting(): String {
         return "greeting"
     }
 
     @GetMapping("/main")
-    fun main(model: Model): String {
-        model["messages"] = messageRepo.findAll()
+    fun main(@RequestParam(defaultValue = "") filter: String, model: Model): String {
+        model["messages"] = if (!filter.isBlank()) {
+            messageRepo.findByTag(filter)
+        } else {
+            messageRepo.findAll()
+        }
+        model["filter"] = filter
 
         return "main"
     }
 
-    @PostMapping("/main")
+    @PostMapping("/add")
     fun add(
             @AuthenticationPrincipal user: User,
             @RequestParam text: String,
-            @RequestParam tag: String, model: Model
+            @RequestParam tag: String
     ): String {
         val message = Message(0, text, tag, user)
         messageRepo.save(message)
-        model["messages"] = messageRepo.findAll()
 
-        return "main"
-    }
-
-    @PostMapping("/filter")
-    fun filter(@RequestParam filter: String, model: Model): String {
-        model["messages"] = if (filter.isBlank()) messageRepo.findAll() else messageRepo.findByTag(filter)
-
-        return "main"
+        return "redirect:/main"
     }
 
 }
