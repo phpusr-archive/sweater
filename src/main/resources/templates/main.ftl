@@ -1,44 +1,55 @@
-<#import "parts/common.ftl" as c>
-<#import "parts/login.ftl" as l>
+<#import "parts/common.ftl" as c />
 
 <@c.page>
-<div>
-    <@l.logout />
-    <span><a href="/user">User list</a></span>
-</div>
-
-<div>
-    <form method="post" action="/add" enctype="multipart/form-data">
-        <input type="hidden" name="_csrf" value="${_csrf.token}" />
-        <input type="text" name="text" placeholder="Введите сообщение" />
-        <input type="text" name="tag" placeholder="Тэг" />
-        <div>
-            <input type="file" name="file" />
-        </div>
-        <div>
-            <button type="submit">Добавить</button>
-        </div>
+<div class="form-row">
+    <form class="form-inline" method="get" action="/main">
+        <input type="text" name="filter" class="form-control mr-1" value="${filter}" placeholder="Search by tag" />
+        <button type="submit" class="btn btn-primary">Search</button>
     </form>
 </div>
 
-<div>Список сообщений</div>
+<a class="btn my-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    Add new message
+</a>
+<div class="collapse" id="collapseExample">
+    <div class="col-sm-6">
+        <form method="post" action="/add" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf" value="${_csrf.token}" />
 
-<form method="get" action="/main">
-    <input type="text" name="filter" value="${filter}" />
-    <button type="submit">Фильтр</button>
-</form>
+            <div class="form-group">
+                <input type="text" name="text" class="form-control" placeholder="Введите сообщение" />
+            </div>
 
-<#list messages as message>
-<div>
-    <b>${message.id}</b>
-    <span>${message.text}</span>
-    <i>${message.tag}</i>
-    <strong>${message.author.username}</strong>
-    <#if message.filename??>
-        <div><img src="/img/${message.filename}"</div>
-    </#if>
+            <div class="form-group">
+                <input type="text" name="tag" class="form-control" placeholder="Тэг" />
+            </div>
+
+            <div class="custom-file">
+                <input type="file" name="file" class="custom-file-input" />
+                <label class="custom-file-label">Choose file</label>
+            </div>
+
+            <div class="form-group mt-3">
+                <button type="submit" class="btn btn-primary">Добавить</button>
+            </div>
+        </form>
+    </div>
 </div>
+
+<div class="card-columns">
+<#list messages as message>
+    <div class="card my-3">
+        <#if message.filename??>
+        <img class="card-img-top" src="/img/${message.filename}" />
+        </#if>
+        <div class="card-body">
+            <h5 class="card-title">#${message.id} ${message.tag}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">${message.author.username}</h6>
+            <p class="card-text">${message.text}</p>
+        </div>
+    </div>
 <#else>
-<div>No messages</div>
+    <div>No messages</div>
 </#list>
+</div>
 </@c.page>

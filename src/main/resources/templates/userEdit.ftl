@@ -1,23 +1,28 @@
-<#import "parts/common.ftl" as c>
+<#import "parts/common.ftl" as c />
 
 <@c.page>
 <h2>User edit</h2>
 
-<form action="/user" method="post">
-    <input type="hidden" name="_csrf" value="${_csrf.token}" />
-    <input type="hidden" name="userId" value="${user.id}" />
-    <div>Name: <input type="text" name="username" value="${user.username}" /></div>
+<div class="col-sm-3">
+    <form action="/user" method="post">
+        <input type="hidden" name="_csrf" value="${_csrf.token}" />
 
-    <#list roles as role>
-        <div>
-            <label>
-                <input type="checkbox" name="roles" value="${role}" ${user.roles?seq_contains(role)?string("checked", "")} />
-                ${role}
-            </label>
+        <input type="hidden" name="userId" value="${user.id}" />
+
+        <div class="form-group">
+            <label for="username">Name</label>
+            <input type="text" name="username" value="${user.username}" class="form-control" />
         </div>
-    </#list>
 
-    <button type="submit">Save</button>
+        <#list roles as role>
+            <div class="form-group form-check">
+                <input type="checkbox" name="roles" class="form-check-input" value="${role}" ${user.roles?seq_contains(role)?string("checked", "")} />
+                <label class="form-check-label">${role}</label>
+            </div>
+        </#list>
 
-</form>
+        <button type="submit" class="btn btn-primary">Save</button>
+
+    </form>
+</div>
 </@c.page>

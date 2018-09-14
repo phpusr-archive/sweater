@@ -37,6 +37,8 @@ data class User(
     override fun isAccountNonExpired() = true
 
     override fun isAccountNonLocked() = true
+
+    fun isAdmin() = roles.contains(Role.ADMIN)
 }
 
 interface UserRepo : JpaRepository<User, Long> {

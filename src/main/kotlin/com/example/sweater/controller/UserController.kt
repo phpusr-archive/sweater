@@ -32,9 +32,13 @@ class UserController(private val userRepo: UserRepo) {
     @PostMapping
     fun userSave(
             @RequestParam username: String,
-            @RequestParam roles: Set<Role>,
+            @RequestParam(defaultValue = "") roles: Set<Role>,
             @RequestParam("userId") user: User
     ): String {
+        if (username.isBlank()) {
+            return "redirect:/user/${user.id}"
+        }
+
         user.username = username
         user.roles.clear()
         user.roles.addAll(roles)
