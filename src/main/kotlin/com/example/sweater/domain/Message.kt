@@ -10,6 +10,7 @@ data class Message(
         val id: Int,
         val text: String,
         val tag: String,
+        val filename: String?,
 
         @ManyToOne(fetch = FetchType.EAGER)
         @JoinColumn(name = "user_id")

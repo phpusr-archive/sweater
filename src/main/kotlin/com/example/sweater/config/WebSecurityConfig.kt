@@ -18,7 +18,7 @@ class WebSecurityConfig(private val userService: UserService) : WebSecurityConfi
     override fun configure(http: HttpSecurity) {
         http
             .authorizeRequests()
-                .antMatchers("/", "/registration").permitAll()
+                .antMatchers("/", "/registration", "/static/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
             .formLogin()
