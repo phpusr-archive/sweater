@@ -19,9 +19,14 @@ class RegistrationController(private val userRepo: UserRepo) {
 
     @PostMapping("/registration")
     fun addUser(user: User, model: Model): String {
-        val dbUser = userRepo.findByUsername(user.username ?: "")
+        val dbUser = userRepo.findByUsername(user.username)
         if (dbUser != null) {
             model["message"] = "User exists! ${dbUser}"
+            return "registration"
+        }
+
+        if (user.username.isBlank() || user.password.isBlank()) {
+            model["message"] = "Blank username or password"
             return "registration"
         }
 

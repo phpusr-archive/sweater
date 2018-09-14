@@ -18,10 +18,13 @@ data class User(
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")])
     @Enumerated(EnumType.STRING)
-    private val roles: MutableSet<Role> = mutableSetOf()
+    val roles: MutableSet<Role> = mutableSetOf()
 ): UserDetails {
 
     override fun getUsername() = username
+    fun setUsername(username: String) {
+        this.username = username
+    }
 
     override fun getPassword() = password
 
