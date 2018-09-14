@@ -2,7 +2,9 @@ package com.example.sweater.controller
 
 import com.example.sweater.domain.Message
 import com.example.sweater.domain.MessageRepo
+import com.example.sweater.domain.User
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -29,8 +31,12 @@ class MainController {
     }
 
     @PostMapping("/main")
-    fun add(@RequestParam text: String, @RequestParam tag: String, model: Model): String {
-        val message = Message(0, text, tag)
+    fun add(
+            @AuthenticationPrincipal user: User,
+            @RequestParam text: String,
+            @RequestParam tag: String, model: Model
+    ): String {
+        val message = Message(0, text, tag, user)
         messageRepo.save(message)
         model["messages"] = messageRepo.findAll()
 

@@ -3,7 +3,6 @@ package com.example.sweater.controller
 import com.example.sweater.domain.Role
 import com.example.sweater.domain.User
 import com.example.sweater.domain.UserRepo
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -11,9 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 
 @Controller
-class RegistrationController {
-    @Autowired
-    private lateinit var userRepo: UserRepo
+class RegistrationController(private val userRepo: UserRepo) {
 
     @GetMapping("/registration")
     fun registration(): String {
@@ -22,14 +19,14 @@ class RegistrationController {
 
     @PostMapping("/registration")
     fun addUser(user: User, model: Model): String {
-        val dbUser = userRepo.findByUsername(user.username)
+        val dbUser = userRepo.findByUsername(user.username ?: "")
         if (dbUser != null) {
             model["message"] = "User exists! ${dbUser}"
             return "registration"
         }
 
         user.active = true
-        user.roles.add(Role.USER)
+        user.authorities.add(Role.USER)
         userRepo.save(user)
 
         return "redirect:/login"
