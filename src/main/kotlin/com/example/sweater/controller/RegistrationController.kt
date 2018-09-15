@@ -5,9 +5,11 @@ import com.example.sweater.service.UserService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import javax.validation.Valid
 
 @Controller
 class RegistrationController(private val userService: UserService) {
@@ -18,14 +20,23 @@ class RegistrationController(private val userService: UserService) {
     }
 
     @PostMapping("/registration")
-    fun addUser(user: User, model: Model): String {
-        if (user.username.isBlank() || user.email.isBlank() || user.password.isBlank()) {
-            model["message"] = "Blank username or email or password"
+    fun addUser(
+            @Valid user: User,
+            bindingResult: BindingResult,
+            model: Model
+    ): String {
+        if (bindingResult.hasErrors()) {
+            model.mergeAttributes(ControllerUtils.getErrors(bindingResult))
+            return "registration"
+        }
+
+        if (user.password != user.password2) {
+            model["password2Error"] = "Password are different!"
             return "registration"
         }
 
         if (!userService.addUser(user)) {
-            model["message"] = "User exists!"
+            model["usernameError"] = "User exists!"
             return "registration"
         }
 

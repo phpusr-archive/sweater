@@ -4,7 +4,11 @@
 <@c.page>
 <h2>Login page</h2>
 
-${message!}
+<#if Session?? && Session.SPRING_SECURITY_LAST_EXCEPTION??>
+    <div class="alert alert-danger" role="alert">
+        ${Session.SPRING_SECURITY_LAST_EXCEPTION.message}
+    </div>
+</#if>
 
 <@l.login "/login" "Sign in" true />
 

@@ -4,13 +4,27 @@ import com.example.sweater.domain.Role
 import com.example.sweater.domain.User
 import com.example.sweater.domain.UserRepo
 import org.springframework.security.core.userdetails.UserDetailsService
+import org.springframework.security.core.userdetails.UsernameNotFoundException
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class UserService(private val userRepo: UserRepo, private val mailSender: MailService) : UserDetailsService {
+class UserService(
+        private val userRepo: UserRepo,
+        private val mailSender: MailService,
+        private val passwordEncoder: BCryptPasswordEncoder
+) : UserDetailsService {
 
-    override fun loadUserByUsername(username: String) = userRepo.findByUsername(username)
+    override fun loadUserByUsername(username: String): User {
+        val user = userRepo.findByUsername(username)
+
+        if (user == null) {
+            throw UsernameNotFoundException("User not found")
+        }
+
+        return user
+    }
 
     fun addUser(user: User): Boolean {
         val dbUser = userRepo.findByUsername(user.username)
@@ -20,6 +34,7 @@ class UserService(private val userRepo: UserRepo, private val mailSender: MailSe
         }
 
         user.authorities.add(Role.USER)
+        user.password = passwordEncoder.encode(user.password)
         sendActivationCode(user)
         userRepo.save(user)
 
@@ -27,6 +42,8 @@ class UserService(private val userRepo: UserRepo, private val mailSender: MailSe
     }
 
     fun sendActivationCode(user: User) {
+        if (true) return
+
         user.activationCode = UUID.randomUUID().toString()
         user.active = false
         userRepo.save(user)
@@ -67,7 +84,7 @@ class UserService(private val userRepo: UserRepo, private val mailSender: MailSe
         }
 
         if (password.isNotBlank()) {
-            user.password = password
+            user.password = passwordEncoder.encode(password)
         }
 
         userRepo.save(user)

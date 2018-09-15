@@ -3,7 +3,7 @@
 <@c.page>
 <div class="form-row">
     <form class="form-inline" method="get" action="/main">
-        <input type="text" name="filter" class="form-control mr-1" value="${filter}" placeholder="Search by tag" />
+        <input type="text" name="filter" class="form-control mr-1" value="${filter!}" placeholder="Search by tag" />
         <button type="submit" class="btn btn-primary">Search</button>
     </form>
 </div>
@@ -11,17 +11,25 @@
 <a class="btn my-2" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
     Add new message
 </a>
-<div class="collapse" id="collapseExample">
+<div class="collapse <#if message??>show</#if>" id="collapseExample">
     <div class="col-sm-6">
-        <form method="post" action="/add" enctype="multipart/form-data">
+        <form method="post" action="/main" enctype="multipart/form-data">
             <input type="hidden" name="_csrf" value="${_csrf.token}" />
 
             <div class="form-group">
-                <input type="text" name="text" class="form-control" placeholder="Введите сообщение" />
+                <input type="text" name="text" class="form-control ${(textError??)?string('is-invalid', '')}"
+                       placeholder="Введите сообщение" value="<#if message??>${message.text}</#if>" />
+                <#if textError??>
+                <div class="invalid-feedback">${textError}</div>
+                </#if>
             </div>
 
             <div class="form-group">
-                <input type="text" name="tag" class="form-control" placeholder="Тэг" />
+                <input type="text" name="tag" class="form-control ${(tagError??)?string('is-invalid', '')}"
+                       placeholder="Тэг" value="<#if message??>${message.tag}</#if>" />
+                <#if tagError??>
+                <div class="invalid-feedback">${tagError}</div>
+                </#if>
             </div>
 
             <div class="custom-file">
@@ -43,7 +51,7 @@
         <img class="card-img-top" src="/img/${message.filename}" />
         </#if>
         <div class="card-body">
-            <h5 class="card-title">#${message.id} ${message.tag}</h5>
+            <h5 class="card-title">#${message.id} ${message.tag!}</h5>
             <h6 class="card-subtitle mb-2 text-muted">${message.author.username}</h6>
             <p class="card-text">${message.text}</p>
         </div>

@@ -7,20 +7,43 @@
     <div class="col-sm-6">
         <div class="form-group">
             <label for="username">User name</label>
-            <input type="text" class="form-control" name="username" placeholder="Enter username">
+            <input type="text" class="form-control ${(usernameError??)?string('is-invalid', '')}" name="username"
+                   placeholder="Enter username" value="<#if user??>${user.username}</#if>" />
+            <#if usernameError??>
+            <div class="invalid-feedback">${usernameError}</div>
+            </#if>
         </div>
 
         <#if !isLoginPage>
         <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" placeholder="Enter email">
+            <input type="email" class="form-control ${(emailError??)?string('is-invalid', '')}" name="email"
+                   placeholder="Enter email" value="<#if user??>${user.email}</#if>" />
+            <#if emailError??>
+            <div class="invalid-feedback">${emailError}</div>
+            </#if>
         </div>
         </#if>
 
         <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" class="form-control" name="password" placeholder="Password">
+            <input type="password" class="form-control ${(passwordError??)?string('is-invalid', '')}" name="password"
+                   placeholder="Password" />
+            <#if passwordError??>
+            <div class="invalid-feedback">${passwordError}</div>
+            </#if>
         </div>
+
+        <#if !isLoginPage>
+        <div class="form-group">
+            <label for="password2">Password confirm</label>
+            <input type="password" class="form-control ${(password2Error??)?string('is-invalid', '')}" name="password2"
+                   placeholder="Password confirm" />
+            <#if password2Error??>
+            <div class="invalid-feedback">${password2Error}</div>
+            </#if>
+        </div>
+        </#if>
 
         <#if isLoginPage>
         <div class="form-group form-check">

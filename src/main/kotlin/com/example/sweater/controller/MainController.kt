@@ -8,12 +8,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.multipart.MultipartFile
 import java.io.File
 import java.util.*
+import javax.validation.Valid
 
 @Controller
 class MainController(val messageRepo: MessageRepo, @Value("\${upload.path}") val uploadPath: String) {
@@ -35,20 +37,29 @@ class MainController(val messageRepo: MessageRepo, @Value("\${upload.path}") val
         return "main"
     }
 
-    @PostMapping("/add")
+    @PostMapping("/main")
     fun add(
             @AuthenticationPrincipal user: User,
-            @RequestParam text: String,
-            @RequestParam tag: String,
-            @RequestParam file: MultipartFile?
+            @RequestParam file: MultipartFile?,
+            @Valid message: Message,
+            bindingResult: BindingResult,
+            model: Model
     ): String {
+        if (bindingResult.hasErrors()) {
+            model.mergeAttributes(ControllerUtils.getErrors(bindingResult))
+            model["messages"] = messageRepo.findAll().reversed()
+
+            return "main"
+        }
+
         val filename = if (file != null && !file.isEmpty) {
             val filename = "${UUID.randomUUID()}-${file.originalFilename}"
             file.transferTo(File("${uploadPath}/${filename}"))
             filename
         } else null
 
-        val message = Message(0, text, tag, filename, user)
+        message.filename = filename
+        message.author = user
         messageRepo.save(message)
 
         return "redirect:/main"

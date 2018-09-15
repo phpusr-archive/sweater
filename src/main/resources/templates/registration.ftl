@@ -4,8 +4,6 @@
 <@c.page>
 <h2>Registration</h2>
 
-<div>${message!}</div>
-
 <@l.login "/registration" "Registration" false />
 
 </@c.page>
