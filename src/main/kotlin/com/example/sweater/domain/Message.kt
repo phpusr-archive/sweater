@@ -7,7 +7,7 @@ import javax.persistence.*
 data class Message(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
-        val id: Int,
+        val id: Long,
         val text: String,
         val tag: String,
         val filename: String?,
@@ -17,6 +17,6 @@ data class Message(
         val author: User
 )
 
-interface MessageRepo : CrudRepository<Message, Int> {
+interface MessageRepo : CrudRepository<Message, Long> {
         fun findByTag(tag: String): List<Message>
 }

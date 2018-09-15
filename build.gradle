@@ -70,6 +70,8 @@ dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-data-jpa'
 	// Use MySQL Connector-J
 	compile 'mysql:mysql-connector-java'
+	// Migration DB
+	compile("org.flywaydb:flyway-core")
 	// Security
 	compile("org.springframework.boot:spring-boot-starter-security")
 	// Mail

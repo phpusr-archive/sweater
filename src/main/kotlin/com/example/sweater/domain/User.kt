@@ -15,7 +15,7 @@ data class User(
 
     var active: Boolean = false,
     var activationCode: String?,
-    val email: String,
+    var email: String,
 
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")])
@@ -29,6 +29,9 @@ data class User(
     }
 
     override fun getPassword() = password
+    fun setPassword(password: String) {
+        this.password = password
+    }
 
     override fun getAuthorities() = roles
 

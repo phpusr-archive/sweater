@@ -25,10 +25,6 @@
             </#if>
         </ul>
 
-        <#if user??>
-            <div class="navbar-text">${name!}</div>
-        </#if>
-
         <@l.loginAndLogout/>
     </div>
 </nav>

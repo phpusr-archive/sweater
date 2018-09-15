@@ -2,8 +2,9 @@ package com.example.sweater.controller
 
 import com.example.sweater.domain.Role
 import com.example.sweater.domain.User
-import com.example.sweater.domain.UserRepo
+import com.example.sweater.service.UserService
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.ui.set
@@ -11,16 +12,17 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAuthority('ADMIN')")
-class UserController(private val userRepo: UserRepo) {
+class UserController(private val userService: UserService) {
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping
     fun userList(model: Model): String {
-        model["users"] = userRepo.findAll()
+        model["users"] = userService.findAll()
 
         return "userList"
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("{user}")
     fun userEditForm(@PathVariable user: User, model: Model): String {
         model["user"] = user
@@ -29,6 +31,7 @@ class UserController(private val userRepo: UserRepo) {
         return "userEdit"
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping
     fun userSave(
             @RequestParam username: String,
@@ -39,13 +42,28 @@ class UserController(private val userRepo: UserRepo) {
             return "redirect:/user/${user.id}"
         }
 
-        user.username = username
-        user.roles.clear()
-        user.roles.addAll(roles)
-
-        userRepo.save(user)
+        userService.saveUser(user, username, roles)
 
         return "redirect:/user"
+    }
+
+    @GetMapping("profile")
+    fun profile(model: Model, @AuthenticationPrincipal user: User): String {
+        model["username"] = user.username
+        model["email"] = user.email
+
+        return "profile"
+    }
+
+    @PostMapping("profile")
+    fun profile(
+            @AuthenticationPrincipal user: User,
+            @RequestParam password: String,
+            @RequestParam email: String
+    ): String {
+        userService.updateProfile(user, password, email)
+
+        return "redirect:/user/profile"
     }
 
 }
