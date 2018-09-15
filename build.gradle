@@ -72,4 +72,6 @@ dependencies {
 	compile 'mysql:mysql-connector-java'
 	// Security
 	compile("org.springframework.boot:spring-boot-starter-security")
+	// Mail
+	compile("org.springframework.boot:spring-boot-starter-mail")
 }

@@ -4,6 +4,8 @@
 <@c.page>
 <h2>Login page</h2>
 
+${message!}
+
 <@l.login "/login" "Sign in" true />
 
 </@c.page>

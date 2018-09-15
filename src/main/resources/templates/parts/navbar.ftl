@@ -26,7 +26,7 @@
         </ul>
 
         <#if user??>
-            <div class="navbar-text">${name}</div>
+            <div class="navbar-text">${name!}</div>
         </#if>
 
         <@l.loginAndLogout/>

@@ -14,6 +14,8 @@ data class User(
     private var password: String,
 
     var active: Boolean = false,
+    var activationCode: String?,
+    val email: String,
 
     @ElementCollection(targetClass = Role::class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = [JoinColumn(name = "user_id")])
@@ -43,4 +45,5 @@ data class User(
 
 interface UserRepo : JpaRepository<User, Long> {
     fun findByUsername(username: String): User?
+    fun findByActivationCode(code: String): User?
 }

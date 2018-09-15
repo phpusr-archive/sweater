@@ -10,6 +10,13 @@
             <input type="text" class="form-control" name="username" placeholder="Enter username">
         </div>
 
+        <#if !isLoginPage>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" name="email" placeholder="Enter email">
+        </div>
+        </#if>
+
         <div class="form-group">
             <label for="password">Password</label>
             <input type="password" class="form-control" name="password" placeholder="Password">
