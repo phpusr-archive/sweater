@@ -31,6 +31,9 @@ data class User(
     val roles: MutableSet<Role> = mutableSetOf()
 ): UserDetails {
 
+    @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var messages: Set<Message> = setOf()
+
     override fun getUsername() = username
     fun setUsername(username: String) {
         this.username = username
