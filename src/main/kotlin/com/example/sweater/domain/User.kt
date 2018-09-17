@@ -18,10 +18,6 @@ data class User(
     @field:NotBlank(message = "Password can't be empy")
     private var password: String,
 
-    @field:Transient
-    @field:NotBlank(message = "Password confirmation can't be empty")
-    val password2: String,
-
     var active: Boolean = false,
     var activationCode: String?,
 

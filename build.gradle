@@ -76,4 +76,6 @@ dependencies {
 	compile("org.springframework.boot:spring-boot-starter-security")
 	// Mail
 	compile("org.springframework.boot:spring-boot-starter-mail")
+	// Session
+	compile("org.springframework.session:spring-session-jdbc")
 }

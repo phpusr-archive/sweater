@@ -43,6 +43,12 @@
             <div class="invalid-feedback">${password2Error}</div>
             </#if>
         </div>
+        <div>
+            <div class="g-recaptcha mb-3" data-sitekey="6LdKn3AUAAAAANwFBrpiYHHldTAA3kHfcES67yun"></div>
+            <#if captchaError??>
+            <div class="alert alert-danger" role="alert">${captchaError}</div>
+            </#if>
+        </div>
         </#if>
 
         <#if isLoginPage>
