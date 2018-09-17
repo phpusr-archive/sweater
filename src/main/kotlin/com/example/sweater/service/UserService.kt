@@ -3,6 +3,7 @@ package com.example.sweater.service
 import com.example.sweater.domain.Role
 import com.example.sweater.domain.User
 import com.example.sweater.domain.UserRepo
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -13,7 +14,8 @@ import java.util.*
 class UserService(
         private val userRepo: UserRepo,
         private val mailSender: MailService,
-        private val passwordEncoder: BCryptPasswordEncoder
+        private val passwordEncoder: BCryptPasswordEncoder,
+        @Value("hostname") private val hostname: String
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): User {
@@ -49,7 +51,7 @@ class UserService(
         userRepo.save(user)
 
         val message = "Hello, ${user.username}!\n" +
-                "Welcome to sweater. Please, visit next link: http://localhost:8080/activate/${user.activationCode}"
+                "Welcome to sweater. Please, visit next link: http://${hostname}/activate/${user.activationCode}"
         mailSender.send(user.email, "Activation code", message)
     }
 

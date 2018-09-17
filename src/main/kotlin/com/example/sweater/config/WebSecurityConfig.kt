@@ -1,8 +1,6 @@
 package com.example.sweater.config
 
 import com.example.sweater.service.UserService
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -14,13 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class WebSecurityConfig : WebSecurityConfigurerAdapter() {
-
-    @Autowired
-    private lateinit var userService: UserService
-
-    @Bean
-    fun getPasswordEncoder() = BCryptPasswordEncoder(8)
+class WebSecurityConfig(
+        private val userService: UserService,
+        private val passwordEncoder: BCryptPasswordEncoder
+) : WebSecurityConfigurerAdapter() {
 
     @Throws(Exception::class)
     override fun configure(http: HttpSecurity) {
@@ -41,6 +36,6 @@ class WebSecurityConfig : WebSecurityConfigurerAdapter() {
 
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.userDetailsService(userService)
-                .passwordEncoder(getPasswordEncoder())
+                .passwordEncoder(passwordEncoder)
     }
 }
