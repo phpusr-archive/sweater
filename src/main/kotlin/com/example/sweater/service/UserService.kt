@@ -96,4 +96,14 @@ class UserService(
         }
     }
 
+    fun subscribe(currentUser: User, user: User) {
+        user.subscribers.add(currentUser)
+        userRepo.save(currentUser)
+    }
+
+    fun unsubscribe(currentUser: User, user: User) {
+        user.subscribers.remove(currentUser)
+        userRepo.save(currentUser)
+    }
+
 }

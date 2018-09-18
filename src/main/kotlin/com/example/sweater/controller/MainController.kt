@@ -77,6 +77,10 @@ class MainController(val messageRepo: MessageRepo, @Value("\${upload.path}") val
             model: Model,
             @RequestParam(required = false) message: Message?
     ): String {
+        model["userChannel"] = user
+        model["subscribtionsCount"] = user.subscribtions.size
+        model["subscribersCount"] = user.subscribers.size
+        model["isSubscriber"] = user.subscribers.contains(currentUser)
         model["messages"] = user.messages
         if (message != null) {
             model["message"] = message

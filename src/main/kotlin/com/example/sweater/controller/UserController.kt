@@ -66,4 +66,37 @@ class UserController(private val userService: UserService) {
         return "redirect:/user/profile"
     }
 
+    @GetMapping("subscribe/{user}")
+    fun subscribe(
+            @AuthenticationPrincipal currentUser: User,
+            @PathVariable user: User
+    ): String {
+        userService.subscribe(currentUser, user)
+
+        return "redirect:/user-messages/${user.id}"
+    }
+
+    @GetMapping("unsubscribe/{user}")
+    fun unsubscribe(
+            @AuthenticationPrincipal currentUser: User,
+            @PathVariable user: User
+    ): String {
+        userService.unsubscribe(currentUser, user)
+
+        return "redirect:/user-messages/${user.id}"
+    }
+
+    @GetMapping("{type}/{user}/list")
+    fun userList(
+            model: Model,
+            @PathVariable type: String,
+            @PathVariable user: User
+    ): String {
+        model["userChannel"] = user
+        model["type"] = type
+        model["users"] = if (type == "subscribtions") user.subscribtions else user.subscribers
+
+        return "subscribtions"
+    }
+
 }

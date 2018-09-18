@@ -32,7 +32,23 @@ data class User(
 ): UserDetails {
 
     @OneToMany(mappedBy = "author", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    var messages: Set<Message> = setOf()
+    val messages: Set<Message> = setOf()
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_subscribtions",
+            joinColumns = [JoinColumn(name = "channel_id")],
+            inverseJoinColumns = [JoinColumn(name = "subscriber_id")]
+    )
+    val subscribers: MutableSet<User> = mutableSetOf()
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_subscribtions",
+            joinColumns = [JoinColumn(name = "subscriber_id")],
+            inverseJoinColumns = [JoinColumn(name = "channel_id")]
+    )
+    val subscribtions: Set<User> = setOf()
 
     override fun getUsername() = username
     fun setUsername(username: String) {

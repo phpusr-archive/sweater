@@ -14,7 +14,9 @@
     <tbody>
     <#list users as user>
         <tr>
-            <td>${user.username}</td>
+            <td>
+                <a href="/user-messages/${user.id}">${user.username}</a>
+            </td>
             <td>
             <#list user.roles as role>
                 ${role}<#sep>,
