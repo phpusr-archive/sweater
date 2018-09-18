@@ -4,6 +4,9 @@ import com.example.sweater.domain.Message
 import com.example.sweater.domain.MessageRepo
 import com.example.sweater.domain.User
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -27,13 +30,18 @@ class MainController(val messageRepo: MessageRepo, @Value("\${upload.path}") val
     }
 
     @GetMapping("/main")
-    fun main(@RequestParam(defaultValue = "") filter: String, model: Model): String {
-        model["messages"] = if (!filter.isBlank()) {
-            messageRepo.findByTag(filter).reversed()
+    fun main(
+            @RequestParam(defaultValue = "") filter: String,
+            model: Model,
+            @PageableDefault(sort = ["id"], direction = Sort.Direction.DESC) pageable: Pageable
+    ): String {
+        model["page"] = if (!filter.isBlank()) {
+            messageRepo.findByTag(filter, pageable)
         } else {
-            messageRepo.findAll().reversed()
+            messageRepo.findAll(pageable)
         }
         model["filter"] = filter
+        model["url"] = "/main"
 
         return "main"
     }

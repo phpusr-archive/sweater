@@ -1,6 +1,8 @@
 package com.example.sweater.domain
 
 import org.hibernate.validator.constraints.Length
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.data.repository.CrudRepository
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
@@ -26,5 +28,6 @@ data class Message(
 )
 
 interface MessageRepo : CrudRepository<Message, Long> {
-        fun findByTag(tag: String): List<Message>
+        fun findAll(pageable: Pageable): Page<Message>
+        fun findByTag(tag: String, pageable: Pageable): Page<Message>
 }
