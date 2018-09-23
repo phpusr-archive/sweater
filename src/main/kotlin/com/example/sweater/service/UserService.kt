@@ -6,7 +6,7 @@ import com.example.sweater.domain.UserRepo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -14,8 +14,8 @@ import java.util.*
 class UserService(
         private val userRepo: UserRepo,
         private val mailSender: MailService,
-        private val passwordEncoder: BCryptPasswordEncoder,
-        @Value("hostname") private val hostname: String
+        private val passwordEncoder: PasswordEncoder,
+        @Value("\${hostname}") private val hostname: String
 ) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): User {
@@ -44,7 +44,7 @@ class UserService(
     }
 
     fun sendActivationCode(user: User) {
-        if (true) return
+        if (false) return
 
         user.activationCode = UUID.randomUUID().toString()
         user.active = false

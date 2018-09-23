@@ -8,8 +8,11 @@ import org.springframework.stereotype.Service
 
 @Service
 class MailService(
-        @Qualifier("sweaterMailSender") private val mailSernder: JavaMailSender,
-        @Value("\${spring.mail.username}") private val username: String ) {
+        @Qualifier("sweaterMailSender")
+        private val mailSender: JavaMailSender,
+        @Value("\${spring.mail.username}")
+        private val username: String
+) {
 
     fun send(emailTo: String, subject: String, message: String) {
         val mailMessage = SimpleMailMessage()
@@ -18,7 +21,7 @@ class MailService(
         mailMessage.setSubject(subject)
         mailMessage.setText(message)
 
-        mailSernder.send(mailMessage)
+        mailSender.send(mailMessage)
     }
 
 }
