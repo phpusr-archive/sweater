@@ -44,44 +44,46 @@
     <#else>
         <#assign body = 0..page.totalPages - 1 />
     </#if>
-    <div>
-        <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Pages</a>
-            </li>
-            <#list body as p>
-                <#if p == page.number>
-                    <li class="page-item active">
-                        <a class="page-link" href="#" tabindex="-1">${p + 1}</a>
-                    </li>
-                <#elseif p == -1>
-                    <li class="page-item disabled">
-                        <a class="page-link" href="#" tabindex="-1">...</a>
-                    </li>
-                <#else>
-                    <li class="page-item">
-                        <a class="page-link" href="${url}?page=${p}&size=${page.size}" tabindex="-1">${p + 1}</a>
-                    </li>
-                </#if>
-            </#list>
-        </ul>
+    <div class="container mt-3">
+        <div class="row">
+            <ul class="pagination pagination col justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Pages</a>
+                </li>
+                <#list body as p>
+                    <#if p == page.number>
+                        <li class="page-item active">
+                            <a class="page-link" href="#" tabindex="-1">${p + 1}</a>
+                        </li>
+                    <#elseif p == -1>
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1">...</a>
+                        </li>
+                    <#else>
+                        <li class="page-item">
+                            <a class="page-link" href="${url}?page=${p}&size=${page.size}" tabindex="-1">${p + 1}</a>
+                        </li>
+                    </#if>
+                </#list>
+            </ul>
 
-        <ul class="pagination">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1">Elements on page</a>
-            </li>
-            <#list [5, 10, 25, 50] as size>
-                <#if size == page.size>
-                    <li class="page-item active">
-                        <a class="page-link" href="#" tabindex="-1">${size}</a>
-                    </li>
-                <#else>
-                    <li class="page-item">
-                        <a class="page-link" href="${url}?page=${page.number}&size=${size}" tabindex="-1">${size}</a>
-                    </li>
-                </#if>
-            </#list>
-        </ul>
+            <ul class="pagination col justify-content-center">
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" tabindex="-1">Elements on page</a>
+                </li>
+                <#list [5, 10, 25, 50] as size>
+                    <#if size == page.size>
+                        <li class="page-item active">
+                            <a class="page-link" href="#" tabindex="-1">${size}</a>
+                        </li>
+                    <#else>
+                        <li class="page-item">
+                            <a class="page-link" href="${url}?page=${page.number}&size=${size}" tabindex="-1">${size}</a>
+                        </li>
+                    </#if>
+                </#list>
+            </ul>
+        </div>
     </div>
 </#macro>
 

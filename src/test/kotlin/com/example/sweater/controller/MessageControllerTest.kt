@@ -26,7 +26,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 @Sql(value = ["/create-user-before.sql", "/messages-list-before.sql"], executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 // TODO repeatable annotations not work
 // @Sql(value = ["/messages-list-after.sql", "/create-user-after.sql"], executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class MainControllerTest {
+class MessageControllerTest {
 
     @Autowired
     private lateinit var mockMvc: MockMvc
